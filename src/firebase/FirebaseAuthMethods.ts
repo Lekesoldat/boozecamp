@@ -1,18 +1,18 @@
 import firebase from "firebase";
 
-export interface AuthCredentials {
-  email: string;
-  password: string;
-}
-
-export const signUp = ({ email, password }: AuthCredentials) =>
+export const signUp = (username: string, email: string, password: string) =>
   firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
-    .then((res) => console.log("Successfully signed up!\n", res))
-    .catch((err) => console.error(err));
+    .then((res) =>
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(res.user?.uid)
+        .set({ username, email })
+    );
 
-export const signIn = ({ email, password }: AuthCredentials) =>
+export const signIn = (email: string, password: string) =>
   firebase
     .auth()
     .signInWithEmailAndPassword(email, password)

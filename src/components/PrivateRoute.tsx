@@ -4,9 +4,9 @@ import { Redirect, Route } from "react-router-dom";
 import { useAuth } from "../context/Authentication";
 
 export const ProtectedRoute = <T extends RouteProps = RouteProps>(props: T) => {
-  const { isAuthenticated } = useAuth();
+  const { user } = useAuth();
 
-  if (!isAuthenticated) {
+  if (!user) {
     return <Redirect to="/sign-in" />;
   }
 

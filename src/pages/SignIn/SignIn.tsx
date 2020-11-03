@@ -1,28 +1,34 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/Authentication";
 import { signIn } from "../../firebase/FirebaseAuthMethods";
 
 const SignIn = () => {
-  const { isAuthenticated } = useAuth();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
 
-  if (isAuthenticated) {
+  // Redirect to Home if authenticated.
+  if (user) {
     return <Redirect to="/" />;
   }
 
   return (
-    <button
-      onClick={async () => {
-        setLoading(true);
-        await signIn({
-          email: "magnuslholtet@gmail.com",
-          password: "password123",
-        });
-      }}
-    >
-      {loading ? "Loading..." : "Sign In!"}
-    </button>
+    <>
+      <div>
+        Dont have an account? Go to the
+        <NavLink to="/sign-up">SignUp page!</NavLink>
+      </div>
+
+      <button
+        onClick={async () => {
+          setLoading(true);
+          await signIn("magnuslholtet@gmail.com", "passord123");
+        }}
+      >
+        {loading ? "Loading..." : "Sign In!"}
+      </button>
+    </>
   );
 };
 
